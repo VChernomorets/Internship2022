@@ -1,0 +1,12 @@
+{
+  "name": "lesson-node",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "ENV=DEV node node",
+    "prod": "ENV=PRODUCTION done node"
+  },
+  "dependencies": {
+    "axios": "^1.1.3"
+  }
+}

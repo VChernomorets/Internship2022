@@ -3,11 +3,11 @@
  * Should return 'I'm firstName lastName'
  */
 
-function sayWho() {
-    return "I'm Vlad Chernomorets";
+function sayWho(firstName, lastName) {
+    return `I'm ${firstName} ${lastName}`;
 }
 
-console.log(sayWho());
+console.log(sayWho('Vlad', 'Chernomorets'));
 
 /**
  * 2. Write a function that accepts numbers and return their sum

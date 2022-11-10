@@ -9,7 +9,11 @@ axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com/';
 
 axios.get('/users')
     .then(({data}) => {
-        fs.writeFileSync('users.json', JSON.stringify(data))
+        fs.writeFile('users.json', JSON.stringify(data), (error) => {
+            if(error){
+                console.log(error)
+            }
+        })
     })
     .catch(error => {
         console.log(error);
@@ -23,22 +27,31 @@ axios.get('/users')
  * If param is DEV get data from https://jsonplaceholder.typicode.com/albums and write if to file albums.json
  */
 
-if(process.env.ENV === 'PRODUCTION') {
-    axios.get('/todos')
-        .then(({data}) => {
-            fs.writeFileSync('todos.json', JSON.stringify(data))
-        })
-        .catch(error => {
-            console.log(error);
-        });
-} else if (process.env.ENV === 'DEV') {
-    axios.get('/albums')
-        .then(({data}) => {
-            fs.writeFileSync('albums.json', JSON.stringify(data))
-        })
-        .catch(error => {
-            console.log(error);
-        });
-} else {
-    console.log('Error! Specify the ENV parameter PRODUCTION or DEV.')
+const config = {
+    'PRODUCTION' : {
+        url: '/todos',
+        fileName: 'todos'
+    },
+    'DEV': {
+        url: '/albums',
+        fileName: 'albums'
+    }
 }
+
+if(!config[process.env.ENV]){
+    console.log('Error! Specify the ENV parameter PRODUCTION or DEV.')
+    return;
+}
+
+const {url, fileName} = (() => (config[process.env.ENV]))();
+axios.get(url)
+        .then(({data}) => {
+            fs.writeFile(`${fileName}.json`, JSON.stringify(data), (error) => {
+                if(error){
+                    console.log(error)
+                }
+            })
+        })
+        .catch(error => {
+            console.log(error);
+        });

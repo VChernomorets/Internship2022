@@ -11,7 +11,7 @@ const invoice = {
  */
 
 console.log(`First name: ${invoice.firstName}`);
-console.log(`Last name: ${invoice.lastName}`);
+console.log(`Last name: ${invoice['lastName']}`);
 
 /**
  * 2. Log Object Keys
@@ -78,3 +78,7 @@ console.log({
 Object.entries(invoice).forEach(entry => {
     console.log(`${entry[0]}-${entry[1]}`)
 })
+
+for (const property in invoice) {
+    console.log(`${property}-${invoice[property]}`);
+}

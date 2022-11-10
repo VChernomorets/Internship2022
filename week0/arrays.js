@@ -5,8 +5,8 @@ const myArray = [1, 10, 3, 6, 'ArrayElement'];
  * Please, use more than on solution
  */
 
- console.log(`3: ${myArray[3]}`);
- console.log(`6: ${myArray[6]}`);
+ console.log(`3: ${myArray.find(item => item === 3)}`);
+ console.log(`6: ${myArray.find(item => item === 6)}`);
 
 /**
  *  2. Log type of each element
@@ -54,7 +54,7 @@ console.log({
  * Should return another Array
  */
 
-const multiplied = myArray.map(item => item * 2);
+const multiplied = myArray.filter(item => typeof item === 'number').map(item => item * 2);
 
 console.log({
     multiplied,
@@ -64,7 +64,7 @@ console.log({
  * 7. Calculate array sum
  */
 
-const sum = myArray.reduce((previous, current) => previous + current, 0);
+const sum = myArray.filter(item => typeof item === 'number').reduce((previous, current) => previous + current, 0);
 
 console.log({
     sum,
@@ -74,7 +74,7 @@ console.log({
  * 8. Sort array in ascending and descending order
  */
 
-const asc = myArray.sort((a,b) => a - b);
+const asc = JSON.parse(JSON.stringify(myArray)).sort((a,b) => a - b);
 const desc = JSON.parse(JSON.stringify(asc)).reverse();
 
 console.log({

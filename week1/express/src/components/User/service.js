@@ -5,10 +5,14 @@ function findAll() {
     return UserModel.find();
 }
 
-/**
- *  Leave create service method for future, when we will connect mongo,
- *  we will do manipulations here
- */
+async function find(id) {
+    const user = await UserModel.findOne({ _id: id });
+
+    console.log(user);
+
+    return user;
+}
+
 async function create(firstName, lastName, email) {
     const candidate = await UserModel.findOne({ email });
 
@@ -46,4 +50,5 @@ module.exports = {
     findAll,
     deleteById,
     update,
+    find,
 };

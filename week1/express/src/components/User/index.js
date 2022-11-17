@@ -1,18 +1,33 @@
-const UserService = require('./service');
+const { validationResult } = require('express-validator');
 const ApiError = require('../../exceptions/api-error');
+const UserService = require('./service');
 
-async function findAll(req, res) {
+async function findAll(req, res, next) {
     try {
-        const demo = await UserService.findAll();
+        const users = await UserService.findAll();
 
         return res.status(200).json({
-            data: demo,
+            data: users,
         });
     } catch (error) {
-        return res.status(500).json({
-            error: error.message,
-            details: null,
+        return next(error);
+    }
+}
+
+async function find(req, res, next) {
+    try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return next(ApiError.BadRequest('Validation error!', errors.array()), 400);
+        }
+        const user = await UserService.find(req.params.id);
+
+        return res.status(200).json({
+            data: user,
         });
+    } catch (error) {
+        return next(error);
     }
 }
 
@@ -25,14 +40,11 @@ async function create(req, res, next) {
             data: user,
         });
     } catch (error) {
-        console.log('ERROR:!!!!!!!!!!!!');
-        console.log(error);
-
         return next(error);
     }
 }
 
-async function deleteById(req, res) {
+async function deleteById(req, res, next) {
     try {
         const demo = await UserService.deleteById(req.params.id);
 
@@ -40,14 +52,11 @@ async function deleteById(req, res) {
             data: demo,
         });
     } catch (error) {
-        return res.status(500).json({
-            error: error.message,
-            details: null,
-        });
+        return next(error);
     }
 }
 
-async function update(req, res) {
+async function update(req, res, next) {
     try {
         const demo = await UserService.update(req.params.id, req.body);
 
@@ -55,10 +64,7 @@ async function update(req, res) {
             data: demo,
         });
     } catch (error) {
-        return res.status(500).json({
-            error: error.message,
-            details: null,
-        });
+        return next(error);
     }
 }
 
@@ -67,4 +73,5 @@ module.exports = {
     create,
     deleteById,
     update,
+    find,
 };

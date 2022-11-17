@@ -4,9 +4,7 @@ module.exports = class ApiError extends Error {
     errors;
 
     constructor(status, message, errors = []) {
-        console.log('constructor');
         super(message);
-        console.log('message: ', this.message);
         this.status = status;
         this.errors = errors;
     }

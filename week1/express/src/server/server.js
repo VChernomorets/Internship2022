@@ -7,7 +7,8 @@ const mongodb = require('../config/mongodb');
 
 const app = express();
 
-middleware.init(app);
+middleware.bodyParser(app);
+middleware.morgan(app);
 
 router.init(app);
 

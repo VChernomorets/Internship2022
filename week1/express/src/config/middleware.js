@@ -1,8 +1,9 @@
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const ApiError = require('../exceptions/api-error');
 
 module.exports = {
-    init(app) {
+    bodyParser(app) {
         /**
          * BODY PARSER
          */
@@ -29,10 +30,25 @@ module.exports = {
         app.use((err, req, res, next) => {
             console.log(err);
             if (err instanceof ApiError) {
-                return res.status(err.status).json({ message: err.message, errors: err.errors });
-            }
+                res.status(err.status).json({ message: err.message, errors: err.errors });
+                next();
 
-            return res.status(500).json({ message: 'Unexpected error' });
+                return;
+            }
+            res.status(500).json({ message: 'Unexpected error' });
+            next();
         });
+    },
+    morgan(app) {
+        /**
+         * Logger
+         */
+        app.use(morgan((tokens, req, res) => [
+            tokens.method(req, res),
+            tokens.url(req, res),
+            tokens.status(req, res),
+            tokens.res(req, res, 'content-length'), '-',
+            tokens['response-time'](req, res), 'ms',
+        ].join(' ')));
     },
 };

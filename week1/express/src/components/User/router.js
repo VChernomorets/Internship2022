@@ -1,5 +1,7 @@
 const { Router } = require('express');
-const { body, param } = require('express-validator');
+const schemas = require('./validation');
+const validationMiddleware = require('../../config/validationMiddleware');
+const authMiddleware = require('../../config/authMiddleware');
 const UserComponent = require('./index');
 
 const router = Router();
@@ -7,28 +9,49 @@ const router = Router();
 router.get('/', UserComponent.findAll);
 
 router.post(
-    '/',
-    body('email').isEmail(),
-    body('firstName').isLength({ min: 3, max: 32 }),
-    body('lastName').isLength({ min: 3, max: 32 }),
+    '/auth/register',
+    validationMiddleware(schemas.create, 'body'),
     UserComponent.create,
 );
 
+router.get(
+    '/auth/sign-in',
+    validationMiddleware(schemas.login, 'body'),
+    UserComponent.login,
+);
+
+router.get(
+    '/auth/refresh',
+    authMiddleware,
+    UserComponent.refresh,
+);
+
+router.get(
+    '/auth/logout',
+    authMiddleware,
+    UserComponent.logout,
+);
+router.get(
+    '/auth/account',
+    authMiddleware,
+    UserComponent.getProfile,
+);
 router.delete(
     '/:id',
-    param('id').matches(/^[0-9a-fA-F]{24}$/),
+    validationMiddleware(schemas.paramsId, 'params'),
     UserComponent.deleteById,
 );
 
 router.put(
     '/:id',
-    param('id').matches(/^[0-9a-fA-F]{24}$/),
+    validationMiddleware(schemas.paramsId, 'params'),
+    validationMiddleware(schemas.update, 'params'),
     UserComponent.update,
 );
 
 router.get(
-    '/:id',
-    param('id').matches(/^[0-9a-fA-F]{24}$/),
+    '/find/:id',
+    validationMiddleware(schemas.paramsId, 'params'),
     UserComponent.find,
 );
 

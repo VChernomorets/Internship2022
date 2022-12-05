@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cookies = require('cookie-parser');
 const ApiError = require('../exceptions/api-error');
 
 module.exports = {
@@ -50,5 +51,8 @@ module.exports = {
             tokens.res(req, res, 'content-length'), '-',
             tokens['response-time'](req, res), 'ms',
         ].join(' ')));
+    },
+    cookieParser(app) {
+        app.use(cookies());
     },
 };

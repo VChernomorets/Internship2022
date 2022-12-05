@@ -9,6 +9,7 @@ const app = express();
 
 middleware.bodyParser(app);
 middleware.morgan(app);
+middleware.cookieParser(app);
 
 router.init(app);
 

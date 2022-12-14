@@ -10,9 +10,8 @@ async function register(firstName, lastName, email, password) {
     if (candidate) {
         throw ApiError.BadRequest(`User with email address ${email} already exists`);
     }
-    const hashPassword = await bcrypt.hash(password, 3);
     const user = new UserDto(await UserModel.create({
-        email, password: hashPassword, lastName, firstName,
+        email, password, lastName, firstName,
     }));
     const tokens = tokenService.generateToken({ ...user });
 

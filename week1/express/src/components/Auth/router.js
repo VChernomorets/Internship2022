@@ -2,36 +2,36 @@ const { Router } = require('express');
 const schemas = require('./validation');
 const validationMiddleware = require('../../config/validationMiddleware');
 const authMiddleware = require('../../config/authMiddleware');
-const UserComponent = require('./index');
+const AuthComponent = require('./index');
 
 const router = Router();
 
 router.post(
     '/register',
     validationMiddleware(schemas.register, 'body'),
-    UserComponent.register,
+    AuthComponent.register,
 );
 
 router.get(
     '/login',
     validationMiddleware(schemas.login, 'body'),
-    UserComponent.login,
+    AuthComponent.login,
 );
 
 router.get(
     '/refresh',
-    UserComponent.refresh,
+    AuthComponent.refresh,
 );
 
 router.get(
     '/logout',
     authMiddleware,
-    UserComponent.logout,
+    AuthComponent.logout,
 );
 router.get(
     '/account',
     authMiddleware,
-    UserComponent.getProfile,
+    AuthComponent.getProfile,
 );
 
 module.exports = router;
